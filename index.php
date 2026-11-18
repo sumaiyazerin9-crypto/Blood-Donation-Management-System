@@ -1,4 +1,3 @@
-
 <?php
 require_once __DIR__ . "/config/db.php";
 
@@ -291,6 +290,25 @@ section.content-section {
     letter-spacing: .4px;
 }
 
+/* DONOR AND PATIENT REGISTRATION LINKS */
+
+.module-action {
+    display: inline-block;
+    margin-top: 18px;
+    color: var(--red);
+    font-size: 13px;
+    font-weight: bold;
+    text-decoration: none;
+    border-bottom: 1px solid var(--red);
+    padding-bottom: 5px;
+    transition: color .2s, border-color .2s;
+}
+
+.module-action:hover {
+    color: var(--dark-red);
+    border-color: var(--dark-red);
+}
+
 /* HOW IT WORKS */
 
 .workflow-grid {
@@ -555,7 +573,10 @@ footer p {
                     donation history.
                 </p>
 
-                <small>COMING SOON</small>
+                <a href="register-donor.php"
+                   class="module-action">
+                    Register as a Donor &rarr;
+                </a>
 
             </article>
 
@@ -577,7 +598,10 @@ footer p {
                     your request status.
                 </p>
 
-                <small>COMING SOON</small>
+                <a href="register-patient.php"
+                   class="module-action">
+                    Create a Patient Account &rarr;
+                </a>
 
             </article>
 
