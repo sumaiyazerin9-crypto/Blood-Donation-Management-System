@@ -362,6 +362,21 @@ button:hover {
     border: 1px solid #b5d9bf;
 }
 
+/* Sign In link in the successful registration message */
+.alert-success a {
+    display: inline-block;
+    margin-top: 10px;
+    color: #225b34;
+    font-size: 13px;
+    font-weight: bold;
+    border-bottom: 1px solid currentColor;
+    padding-bottom: 3px;
+}
+
+.alert-success a:hover {
+    color: #173e24;
+}
+
 .alert-error {
     background: #fff0f1;
     color: #8c2634;
@@ -427,11 +442,21 @@ footer {
             </p>
         </div>
 
+        <!-- UPDATED SUCCESS MESSAGE -->
+
         <?php if ($success): ?>
             <div class="alert alert-success" role="status">
-                Donor account created successfully.
-                Login functionality will be available
-                in the next development stage.
+                <strong>Registration Successful</strong>
+                <div>
+                    Your donor account has been created
+                    successfully. You can now sign in
+                    using your registered email address
+                    and password.
+                </div>
+
+                <a href="login.php">
+                    Sign In &rarr;
+                </a>
             </div>
         <?php endif; ?>
 
