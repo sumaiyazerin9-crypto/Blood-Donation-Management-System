@@ -64,6 +64,8 @@ try {
 
         $statement = $pdo->prepare(
             "SELECT
+                u.user_id,
+                d.donor_id,
                 u.name,
                 u.email,
                 d.age,
@@ -83,6 +85,8 @@ try {
 
         $statement = $pdo->prepare(
             "SELECT
+                u.user_id,
+                p.patient_id,
                 u.name,
                 u.email,
                 p.age,
@@ -137,7 +141,6 @@ try {
             ) {
                 $error = "Invalid request. Refresh the page and try again.";
 
-            // Only 1 and 0 are permitted.
             } elseif (
                 !in_array(
                     $newAvailability,
@@ -161,13 +164,12 @@ try {
                     $userId
                 ]);
 
-                // Generate a fresh form security token.
+                // Generate a fresh security token.
                 $_SESSION["availability_csrf"] =
                     bin2hex(random_bytes(32));
 
                 $_SESSION["availability_updated"] = true;
 
-                // Redirect to prevent duplicate submissions.
                 header("Location: dashboard.php", true, 303);
                 exit;
             }
@@ -186,23 +188,58 @@ $fields = [];
 
 if ($profile) {
 
-    $fields = [
-        "Full Name" => $profile["name"],
-        "Email Address" => $profile["email"],
-        "Age" => $profile["age"],
-        "District" => $profile["district"],
-        "Phone Number" => $profile["phone"]
-    ];
+    $formattedUserId = "USR-" .
+        str_pad(
+            (string) (int) $profile["user_id"],
+            4,
+            "0",
+            STR_PAD_LEFT
+        );
 
     if ($role === "donor") {
 
-        $fields["Blood Group"] =
-            $profile["blood_group"];
+        $formattedDonorId = "DNR-" .
+            str_pad(
+                (string) (int) $profile["donor_id"],
+                4,
+                "0",
+                STR_PAD_LEFT
+            );
 
-        $fields["Availability"] =
-            (int) $profile["availability"] === 1
-                ? "Available"
-                : "Unavailable";
+        $fields = [
+            "User ID" => $formattedUserId,
+            "Donor ID" => $formattedDonorId,
+            "Full Name" => $profile["name"],
+            "Email Address" => $profile["email"],
+            "Age" => $profile["age"],
+            "District" => $profile["district"],
+            "Phone Number" => $profile["phone"],
+            "Blood Group" => $profile["blood_group"],
+            "Availability" =>
+                (int) $profile["availability"] === 1
+                    ? "Available"
+                    : "Unavailable"
+        ];
+
+    } else {
+
+        $formattedPatientId = "PAT-" .
+            str_pad(
+                (string) (int) $profile["patient_id"],
+                4,
+                "0",
+                STR_PAD_LEFT
+            );
+
+        $fields = [
+            "User ID" => $formattedUserId,
+            "Patient ID" => $formattedPatientId,
+            "Full Name" => $profile["name"],
+            "Email Address" => $profile["email"],
+            "Age" => $profile["age"],
+            "District" => $profile["district"],
+            "Phone Number" => $profile["phone"]
+        ];
     }
 }
 ?>
@@ -346,7 +383,7 @@ h1 {
     overflow-wrap: anywhere;
 }
 
-/* DONOR AVAILABILITY SECTION */
+/* DONOR AVAILABILITY */
 
 .availability-description {
     color: var(--gray);
@@ -385,6 +422,36 @@ h1 {
 
 .availability-form button {
     padding: 15px 28px;
+}
+
+/* PATIENT DONOR SEARCH */
+
+.search-description {
+    color: var(--gray);
+    font-size: 14px;
+    line-height: 1.8;
+    max-width: 650px;
+    margin-bottom: 25px;
+}
+
+.search-button {
+    display: inline-block;
+    background: var(--red);
+    color: white;
+    padding: 15px 27px;
+    text-decoration: none;
+    font-size: 13px;
+    font-weight: bold;
+    transition: background .2s;
+}
+
+.search-button:hover {
+    background: var(--dark-red);
+}
+
+.search-button:focus-visible {
+    outline: 2px solid var(--red);
+    outline-offset: 4px;
 }
 
 /* MESSAGES */
@@ -427,6 +494,7 @@ footer {
 }
 
 @media (max-width: 650px) {
+
     .details {
         grid-template-columns: 1fr;
     }
@@ -447,8 +515,6 @@ footer {
 </head>
 
 <body>
-
-<!-- TOP NAVIGATION -->
 
 <header>
     <div class="container nav">
@@ -499,8 +565,6 @@ footer {
         displayed below.
     </p>
 
-    <!-- SUCCESS MESSAGE -->
-
     <?php if ($success !== ""): ?>
 
         <div class="alert alert-success" role="status">
@@ -508,8 +572,6 @@ footer {
         </div>
 
     <?php endif; ?>
-
-    <!-- ERROR MESSAGE -->
 
     <?php if ($error !== ""): ?>
 
@@ -620,6 +682,30 @@ footer {
             </section>
 
         <?php else: ?>
+
+            <!-- PATIENT DONOR SEARCH -->
+
+            <section class="card">
+
+                <h2>Find Available Donors</h2>
+
+                <p class="search-description">
+                    Looking for a blood donor?
+                    Search our registered donor network
+                    using blood group and district.
+                    You can view donors who have
+                    currently marked themselves
+                    as available.
+                </p>
+
+                <a
+                    href="search-donors.php"
+                    class="search-button"
+                >
+                    Search Available Donors &rarr;
+                </a>
+
+            </section>
 
             <!-- PATIENT INFORMATION -->
 
