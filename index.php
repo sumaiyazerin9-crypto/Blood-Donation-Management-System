@@ -105,6 +105,7 @@ header {
 nav {
     display: flex;
     flex-wrap: wrap;
+    align-items: center;
     gap: 30px;
 }
 
@@ -115,6 +116,23 @@ nav a {
 
 nav a:hover {
     color: var(--red);
+}
+
+/* LOGIN BUTTON - NEW */
+
+nav .login-button {
+    display: inline-block;
+    background: var(--red);
+    color: var(--white);
+    padding: 12px 25px;
+    font-size: 13px;
+    font-weight: bold;
+    transition: background .2s;
+}
+
+nav .login-button:hover {
+    background: var(--dark-red);
+    color: var(--white);
 }
 
 /* HOMEPAGE INTRODUCTION */
@@ -290,7 +308,7 @@ section.content-section {
     letter-spacing: .4px;
 }
 
-/* DONOR AND PATIENT REGISTRATION LINKS */
+/* REGISTRATION LINKS */
 
 .module-action {
     display: inline-block;
@@ -447,6 +465,11 @@ footer p {
             <a href="#about">About</a>
             <a href="#modules">Services</a>
             <a href="#how-it-works">How It Works</a>
+
+            <!-- LOGIN BUTTON - NEW -->
+            <a href="login.php" class="login-button">
+                Login
+            </a>
         </nav>
 
     </div>
